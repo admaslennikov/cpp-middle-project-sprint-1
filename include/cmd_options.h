@@ -4,14 +4,16 @@
 #include <string>
 #include <unordered_map>
 
-namespace CryptoGuard {
-
-class ProgramOptions {
+namespace CryptoGuard
+{
+class ProgramOptions
+{
 public:
     ProgramOptions();
     ~ProgramOptions();
 
-    enum class COMMAND_TYPE {
+    enum class COMMAND_TYPE
+    {
         ENCRYPT,
         DECRYPT,
         CHECKSUM,
@@ -19,24 +21,28 @@ public:
 
     void Parse(int argc, char *argv[]);
 
-    COMMAND_TYPE GetCommand() const { return command_; }
-    std::string GetInputFile() const { return inputFile_; }
-    std::string GetOutputFile() const { return outputFile_; }
-    std::string GetPassword() const { return password_; }
+    COMMAND_TYPE GetCommand() const { return m_command; }
+    std::string GetInputFile() const { return m_inputFile; }
+    std::string GetOutputFile() const { return m_outputFile; }
+    std::string GetPassword() const { return m_password; }
+
+    bool IsHelpRequested() const { return m_helpRequested; }
 
 private:
-    COMMAND_TYPE command_;
-    const std::unordered_map<std::string_view, COMMAND_TYPE> commandMapping_ = {
+    COMMAND_TYPE m_command = COMMAND_TYPE::CHECKSUM;
+
+    const std::unordered_map<std::string_view, COMMAND_TYPE> m_commandMapping = {
         {"encrypt", ProgramOptions::COMMAND_TYPE::ENCRYPT},
         {"decrypt", ProgramOptions::COMMAND_TYPE::DECRYPT},
         {"checksum", ProgramOptions::COMMAND_TYPE::CHECKSUM},
     };
 
-    std::string inputFile_;
-    std::string outputFile_;
-    std::string password_;
+    std::string m_inputFile;
+    std::string m_outputFile;
+    std::string m_password;
 
-    boost::program_options::options_description desc_;
+    boost::program_options::options_description m_desc;
+
+    bool m_helpRequested;
 };
-
 }  // namespace CryptoGuard
