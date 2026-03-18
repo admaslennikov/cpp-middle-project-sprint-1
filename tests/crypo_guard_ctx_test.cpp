@@ -200,6 +200,26 @@ TEST(DecryptFileTests, OutputStreamIsBad)
     ASSERT_THROW(crypto.DecryptFile(in, out, password), std::runtime_error);
 }
 
+TEST(DecryptFileTests, PartOfEncryptedDataIsLost)
+{
+    CryptoGuardCtx crypto;
+
+    const std::string plainText = "Some text to test encryption/decryption/checksum";
+    const std::string password = "password_1";
+    const std::string encrypted = EncryptString(crypto, plainText, password);
+
+    ASSERT_GT(encrypted.size(), 1u);
+
+    const std::string damagedEncrypted = encrypted.substr(0, encrypted.size() - 1);
+
+    std::stringstream in;
+    std::stringstream out;
+
+    in.str(damagedEncrypted);
+
+    ASSERT_THROW(crypto.DecryptFile(in, out, password), std::runtime_error);
+}
+
 // Checksum tests
 TEST(CalculateChecksumTests, EmptyString)
 {

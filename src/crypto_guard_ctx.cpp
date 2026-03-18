@@ -79,7 +79,7 @@ std::string GetOpenSSLErrorInfo()
 std::string MakeContextErrorMessage(CryptoGuard::CRYPTO_OPERATION operation, const std::string &details)
 {
     std::ostringstream oss;
-    oss << CryptoGuard::ToString(operation) << " failed: " << details;
+    oss << ToString(operation) << " failed: " << details;
     return oss.str();
 }
 
